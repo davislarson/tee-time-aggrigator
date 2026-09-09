@@ -44,6 +44,9 @@ NOTE: One important change that I made was to add a map to the first screen to s
 
 This is the commit where this happens: https://github.com/davislarson/tee-time-aggrigator/commit/42522e1c24eeadbb6b36ffcbdeb1ae031a0708d8
 
-Here is a screenshot of the first screen with the map added:
+Before:
+![Screenshot of the first screen without the map](BeforeTweak.png)
+
+After:
 
 ![Screenshot of the first screen with the map added](AfterTweak.png)
