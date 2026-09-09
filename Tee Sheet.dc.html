@@ -24,7 +24,7 @@ a:hover{color:var(--color-accent-600);text-decoration:underline}
 <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px">
 <div style="display:flex;align-items:baseline;gap:14px">
 <span style="font-family:var(--font-heading);font-weight:700;font-size:19px;letter-spacing:.18em;text-transform:uppercase">Tee Sheet</span>
-<span style="font-size:13px;color:var(--color-neutral-700);font-style:italic">Utah County</span>
+
 </div>
 <div style="display:flex;align-items:baseline;gap:22px;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">
 <span>Wed · Sep 9, 2026</span>
@@ -46,13 +46,48 @@ a:hover{color:var(--color-accent-600);text-decoration:underline}
 
 <section style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:40px;align-items:end;padding:64px 0 12px">
 <div>
-<p style="margin:0 0 18px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-accent-700)">Every nearby tee sheet, one page</p>
-<h1 style="margin:0;font-family:var(--font-heading);font-weight:700;font-size:clamp(60px,8.4vw,116px);line-height:.9;letter-spacing:-.025em;text-wrap:balance">Get on the course <span style="color:var(--color-accent-2-700)">FAST</span></h1>
-<p style="margin:26px 0 0;font-size:21px;line-height:1.45;max-width:34em;color:var(--color-neutral-800);text-wrap:pretty">Seven Utah County courses, seven booking sites. Set your radius, your days and your window once — we read every tee sheet and show you what is actually open, sorted by how far you have to drive.</p>
+<p style="margin:0 0 18px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-accent-700)">Every tee sheet near you, one page — wherever you are</p>
+<h1 style="margin:0;font-family:var(--font-heading);font-weight:700;font-size:clamp(60px,8.4vw,116px);line-height:.9;letter-spacing:-.025em;text-wrap:balance">{{ headlineLead }} <span style="color:var(--color-accent-2-700)">{{ headlineTail }}</span></h1>
+<p style="margin:26px 0 0;font-size:21px;line-height:1.45;max-width:34em;color:var(--color-neutral-800);text-wrap:pretty">Every course in range keeps its own booking site. Set your radius, your days and your window once — we read all of their tee sheets and show you what is actually open.</p>
 </div>
 <div style="padding-bottom:10px">
-<div style="font-family:var(--font-heading);font-size:56px;line-height:1;font-weight:700">7</div>
-<div style="font-size:14px;color:var(--color-neutral-700);line-height:1.4;margin-top:6px">courses read live<br>Provo · Orem · Lehi · Springville</div>
+<div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-700)">Searching from</div>
+<sc-if value="{{ locView }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:8px">
+<span style="font-family:var(--font-heading);font-size:30px;font-weight:700;line-height:1.1">{{ location }}</span>
+<button class="btn btn-ghost" onClick="{{ editLoc }}" style="padding:4px 0;font-size:14px">Change</button>
+</div>
+<div style="margin-top:12px;border:1px solid var(--color-neutral-300);background:var(--color-neutral-200);border-radius:var(--radius-md);overflow:hidden">
+<svg viewBox="0 0 300 170" style="display:block;width:100%;height:auto">
+<rect x="0" y="0" width="300" height="170" fill="var(--color-neutral-200)"></rect>
+<g stroke="var(--color-neutral-300)" stroke-width="1">
+<path d="M0 40 H300 M0 86 H300 M0 132 H300 M60 0 V170 M130 0 V170 M212 0 V170"></path>
+</g>
+<path d="M0 118 C70 104 120 132 190 96 S268 52 300 60" stroke="var(--color-neutral-400)" stroke-width="3" fill="none"></path>
+<circle cx="150" cy="86" r="70" fill="var(--color-accent-100)" fill-opacity=".7" stroke="var(--color-accent)" stroke-dasharray="4 4"></circle>
+<circle cx="150" cy="86" r="42" fill="none" stroke="var(--color-accent-300)" stroke-dasharray="3 4"></circle>
+<g fill="var(--color-accent-700)">
+<circle cx="128" cy="62" r="4"></circle><circle cx="176" cy="70" r="4"></circle>
+<circle cx="112" cy="104" r="4"></circle><circle cx="192" cy="112" r="4"></circle>
+<circle cx="150" cy="140" r="4"></circle><circle cx="96" cy="46" r="4"></circle>
+</g>
+<circle cx="248" cy="34" r="4" fill="none" stroke="var(--color-neutral-500)" stroke-width="1.5"></circle>
+<circle cx="150" cy="86" r="7" fill="var(--color-accent-2)"></circle>
+<circle cx="150" cy="86" r="12" fill="none" stroke="var(--color-accent-2)" stroke-width="1.5" stroke-opacity=".5"></circle>
+</svg>
+</div>
+<div style="font-size:14px;color:var(--color-neutral-700);line-height:1.5;margin-top:8px">{{ visibleCount }} of {{ courseCount }} courses inside your {{ radiusLabel }} radius<br>{{ regionTowns }}</div>
+</sc-if>
+<sc-if value="{{ locEdit }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top:8px;display:flex;flex-direction:column;gap:10px">
+<input class="input" value="{{ locDraft }}" onChange="{{ onLocInput }}" placeholder="City, ZIP or address" style="font-size:16px">
+<div style="display:flex;gap:8px">
+<button class="btn btn-primary" onClick="{{ saveLoc }}" style="font-size:14px;padding:8px 14px">Use this</button>
+<button class="btn btn-ghost" onClick="{{ cancelLoc }}" style="font-size:14px;padding:8px 10px">Cancel</button>
+</div>
+<button class="btn btn-secondary" onClick="{{ useGps }}" style="font-size:14px;padding:8px 14px">Use my current location</button>
+</div>
+</sc-if>
 </div>
 </section><section style="padding:52px 0 0">
 <h2 style="margin:0 0 4px;font-family:var(--font-heading);font-size:15px;font-weight:600;letter-spacing:.16em;text-transform:uppercase">Your parameters</h2>
@@ -90,7 +125,7 @@ a:hover{color:var(--color-accent-600);text-decoration:underline}
 <div style="margin-top:12px;font-size:14px;color:var(--color-neutral-700)">{{ windowNote }}</div>
 </div>
 
-<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+<div style="display:flex;flex-wrap:wrap;gap:34px 76px">
 <div>
 <div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700);margin-bottom:12px">Players</div>
 <div style="display:flex;gap:8px">
@@ -304,7 +339,7 @@ a:hover{color:var(--color-accent-600);text-decoration:underline}
 </div>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;regionName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Utah County&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Location&quot;},&quot;regionTowns&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Provo · Orem · Lehi · Springville&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Location&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Find your next tee-time FAST&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Copy&quot;},&quot;defaultRadius&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;10&quot;,&quot;20&quot;,&quot;30&quot;,&quot;45&quot;],&quot;default&quot;:&quot;20&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Defaults&quot;},&quot;defaultView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;course&quot;,&quot;time&quot;],&quot;default&quot;:&quot;course&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Defaults&quot;}}">
 const COURSES = [
   { name: 'Timpanogos Golf Club', city: 'Provo', drive: '9 min', mi: 4, rate: '$42', phone: '(801) 555-0142', site: 'timpanogosgc.com',
     address: '1200 E Center St, Provo', times: ['6:10', '6:30', '7:00', '8:20', '9:40'] },
@@ -326,7 +361,7 @@ const TAKEN = { 'Cedar Hills Golf Club|8:00': true, 'Hobble Creek Golf Course|9:
 
 class Component extends DCLogic {
   state = {
-    screen: 'home', view: 'course', radius: 20,
+    screen: 'home', view: null, radius: null,
     days: ['Sat', 'Sun'], window: '6–10 AM', players: 4, holes: 18, ride: 'Ride',
     sel: { course: 'Sleepy Ridge Golf Course', time: '7:20' }
   };
@@ -347,15 +382,21 @@ class Component extends DCLogic {
     ].join(';');
   }
 
+  cur(key) {
+    if (key === 'radius') return this.state.radius == null ? parseInt(this.props.defaultRadius || 20, 10) : this.state.radius;
+    if (key === 'view') return this.state.view == null ? (this.props.defaultView || 'course') : this.state.view;
+    return this.state[key];
+  }
+
   opts(list, key, extra) {
     return list.map(v => ({
       label: String(v),
-      style: this.pill(this.state[key] === v, extra),
+      style: this.pill(this.cur(key) === v, extra),
       pick: () => this.setState({ [key]: v })
     }));
   }
 
-  visible() { return COURSES.filter(c => c.mi <= this.state.radius); }
+  visible() { return COURSES.filter(c => c.mi <= this.cur('radius')); }
 
   timeLabel(t) { return t + (parseInt(t, 10) < 12 && parseInt(t, 10) >= 6 ? ' AM' : ' PM'); }
 
@@ -379,6 +420,11 @@ class Component extends DCLogic {
 
   renderVals() {
     const st = this.state;
+    const radius = this.cur('radius');
+    const view = this.cur('view');
+    const region = this.props.regionName || 'your area';
+    const headline = this.props.headline || 'Find your next tee-time FAST';
+    const hWords = headline.trim().split(' ');
     const vis = this.visible();
     const dayList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const count = vis.reduce((n, c) => n + c.times.length, 0);
@@ -401,7 +447,23 @@ class Component extends DCLogic {
 
     return {
       isHome: st.screen === 'home', isList: st.screen === 'list', isBook: st.screen === 'book',
-      byCourse: st.view === 'course', byTime: st.view === 'time',
+      byCourse: view === 'course', byTime: view === 'time',
+      regionName: region,
+      location: st.location == null ? region : st.location,
+      locView: !st.editLoc,
+      locEdit: !!st.editLoc,
+      locDraft: st.locDraft == null ? (st.location == null ? region : st.location) : st.locDraft,
+      editLoc: () => this.setState(s => ({ editLoc: true, locDraft: s.location == null ? region : s.location })),
+      cancelLoc: () => this.setState({ editLoc: false, locDraft: null }),
+      onLocInput: e => this.setState({ locDraft: e.target.value }),
+      saveLoc: () => this.setState(s => ({ location: (s.locDraft || '').trim() || region, editLoc: false, locDraft: null })),
+      useGps: () => this.setState({ location: 'My current location', editLoc: false, locDraft: null }),
+      regionTowns: this.props.regionTowns || 'Provo · Orem · Lehi · Springville',
+      courseCount: COURSES.length,
+      visibleCount: vis.length,
+      radiusLabel: radius + ' mi',
+      headlineLead: hWords.slice(0, -1).join(' '),
+      headlineTail: hWords[hWords.length - 1],
       go1: () => this.setState({ screen: 'home' }),
       go2: () => this.setState({ screen: 'list' }),
       go3: () => this.setState({ screen: 'book' }),
@@ -414,16 +476,16 @@ class Component extends DCLogic {
         style: this.pill(st.days.indexOf(d) > -1, { pad: '8px 13px' }),
         pick: () => this.setState(s => ({ days: s.days.indexOf(d) > -1 ? s.days.filter(x => x !== d) : s.days.concat(d) }))
       })),
-      windows: this.opts(['Dawn–8 AM', '6–10 AM', '10 AM–2 PM', 'After 3 PM'], 'window'),
+      windows: this.opts(['Any time', 'Dawn–8 AM', '6–10 AM', '10 AM–2 PM', 'After 3 PM'], 'window'),
       players: this.opts([1, 2, 3, 4], 'players', { pad: '8px 14px' }),
       holes: this.opts([9, 18], 'holes', { pad: '8px 14px' }),
       rides: this.opts(['Walk', 'Ride'], 'ride', { pad: '8px 14px' }),
       views: [
-        { label: 'By course', style: this.pill(st.view === 'course'), pick: () => this.setState({ view: 'course' }) },
-        { label: 'By time', style: this.pill(st.view === 'time'), pick: () => this.setState({ view: 'time' }) }
+        { label: 'By course', style: this.pill(view === 'course'), pick: () => this.setState({ view: 'course' }) },
+        { label: 'By time', style: this.pill(view === 'time'), pick: () => this.setState({ view: 'time' }) }
       ],
       pills: [
-        { label: 'Within ' + st.radius + ' mi', style: this.pill(true, { size: 13, pad: '7px 12px' }), pick: () => this.setState({ radius: st.radius === 45 ? 10 : [20, 30, 45, 45][[10, 20, 30, 45].indexOf(st.radius)] }) },
+        { label: 'Within ' + radius + ' mi', style: this.pill(true, { size: 13, pad: '7px 12px' }), pick: () => this.setState({ radius: radius === 45 ? 10 : [20, 30, 45, 45][[10, 20, 30, 45].indexOf(radius)] }) },
         { label: st.days.join(' / ') || 'Any day', style: this.pill(true, { size: 13, pad: '7px 12px' }), pick: () => this.setState({ screen: 'home' }) },
         { label: st.window, style: this.pill(true, { size: 13, pad: '7px 12px' }), pick: () => this.setState({ screen: 'home' }) },
         { label: st.players + ' players', style: this.pill(true, { size: 13, pad: '7px 12px' }), pick: () => this.setState({ players: st.players === 4 ? 2 : st.players + 1 }) },
@@ -431,7 +493,7 @@ class Component extends DCLogic {
         { label: st.ride, style: this.pill(true, { size: 13, pad: '7px 12px' }), pick: () => this.setState({ ride: st.ride === 'Ride' ? 'Walk' : 'Ride' }) }
       ],
 
-      radiusNote: vis.length + ' of 7 courses within ' + st.radius + ' miles',
+      radiusNote: vis.length + ' of ' + COURSES.length + ' courses we track near you are within ' + radius + ' miles',
       daysNote: st.days.length ? st.days.join(', ') : 'Pick at least one day',
       windowNote: 'Shows every slot that starts in this window',
       summary: st.days.join('/') + ' · ' + st.window + ' · ' + st.players + ' players · ' + st.holes + ' holes · ' + st.ride.toLowerCase(),
