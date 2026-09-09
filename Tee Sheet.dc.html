@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/broadsheet-d0722931-bec8-4f4c-925c-4bed8349781c/styles.css">
+<script src="_ds/broadsheet-d0722931-bec8-4f4c-925c-4bed8349781c/_ds_bundle.js"></script>
+<style>
+body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)}
+a{color:var(--color-accent-700);text-decoration:none}
+a:hover{color:var(--color-accent-600);text-decoration:underline}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:var(--color-bg);padding:0 0 60px">
+
+<header style="max-width:1180px;margin:0 auto;padding:18px 32px 0">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px">
+<div style="display:flex;align-items:baseline;gap:14px">
+<span style="font-family:var(--font-heading);font-weight:700;font-size:19px;letter-spacing:.18em;text-transform:uppercase">Tee Sheet</span>
+<span style="font-size:13px;color:var(--color-neutral-700);font-style:italic">Utah County</span>
+</div>
+<div style="display:flex;align-items:baseline;gap:22px;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">
+<span>Wed · Sep 9, 2026</span>
+<span>Sheets refreshed 4 min ago</span>
+</div>
+</div>
+<div style="height:4px;background:var(--color-text);margin-top:10px"></div>
+<div style="height:1px;background:var(--color-text);margin-top:3px"></div>
+<nav style="display:flex;gap:26px;padding:11px 0 0;font-size:13px;letter-spacing:.08em;text-transform:uppercase">
+<button onClick="{{ go1 }}" style="{{ nav1 }}">1 · Set parameters</button>
+<button onClick="{{ go2 }}" style="{{ nav2 }}">2 · Open times</button>
+<button onClick="{{ go3 }}" style="{{ nav3 }}">3 · Book</button>
+</nav>
+</header>
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<main style="max-width:1180px;margin:0 auto;padding:0 32px">
+
+
+<section style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:40px;align-items:end;padding:64px 0 12px">
+<div>
+<p style="margin:0 0 18px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-accent-700)">Every nearby tee sheet, one page</p>
+<h1 style="margin:0;font-family:var(--font-heading);font-weight:700;font-size:clamp(60px,8.4vw,116px);line-height:.9;letter-spacing:-.025em;text-wrap:balance">Get on the course <span style="color:var(--color-accent-2-700)">FAST</span></h1>
+<p style="margin:26px 0 0;font-size:21px;line-height:1.45;max-width:34em;color:var(--color-neutral-800);text-wrap:pretty">Seven Utah County courses, seven booking sites. Set your radius, your days and your window once — we read every tee sheet and show you what is actually open, sorted by how far you have to drive.</p>
+</div>
+<div style="padding-bottom:10px">
+<div style="font-family:var(--font-heading);font-size:56px;line-height:1;font-weight:700">7</div>
+<div style="font-size:14px;color:var(--color-neutral-700);line-height:1.4;margin-top:6px">courses read live<br>Provo · Orem · Lehi · Springville</div>
+</div>
+</section><section style="padding:52px 0 0">
+<h2 style="margin:0 0 4px;font-family:var(--font-heading);font-size:15px;font-weight:600;letter-spacing:.16em;text-transform:uppercase">Your parameters</h2>
+<p style="margin:0 0 34px;font-size:15px;color:var(--color-neutral-700);font-style:italic">Change any of these later without losing your place.</p>
+
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:44px 64px">
+
+<div>
+<div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700);margin-bottom:12px">Distance from me</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{ radii }}" as="r" hint-placeholder-count="4">
+<button onClick="{{ r.pick }}" style="{{ r.style }}">{{ r.label }}</button>
+</sc-for>
+</div>
+<div style="margin-top:12px;font-size:14px;color:var(--color-neutral-700)">{{ radiusNote }}</div>
+</div>
+
+<div>
+<div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700);margin-bottom:12px">Days I could play</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{ days }}" as="d" hint-placeholder-count="7">
+<button onClick="{{ d.pick }}" style="{{ d.style }}">{{ d.label }}</button>
+</sc-for>
+</div>
+<div style="margin-top:12px;font-size:14px;color:var(--color-neutral-700)">{{ daysNote }}</div>
+</div>
+
+<div>
+<div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700);margin-bottom:12px">Time window</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{ windows }}" as="w" hint-placeholder-count="4">
+<button onClick="{{ w.pick }}" style="{{ w.style }}">{{ w.label }}</button>
+</sc-for>
+</div>
+<div style="margin-top:12px;font-size:14px;color:var(--color-neutral-700)">{{ windowNote }}</div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+<div>
+<div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700);margin-bottom:12px">Players</div>
+<div style="display:flex;gap:8px">
+<sc-for list="{{ players }}" as="p" hint-placeholder-count="4">
+<button onClick="{{ p.pick }}" style="{{ p.style }}">{{ p.label }}</button>
+</sc-for>
+</div>
+</div>
+<div>
+<div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700);margin-bottom:12px">Holes</div>
+<div style="display:flex;gap:8px">
+<sc-for list="{{ holes }}" as="h" hint-placeholder-count="2">
+<button onClick="{{ h.pick }}" style="{{ h.style }}">{{ h.label }}</button>
+</sc-for>
+</div>
+</div>
+<div>
+<div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700);margin-bottom:12px">Walk / ride</div>
+<div style="display:flex;gap:8px">
+<sc-for list="{{ rides }}" as="v" hint-placeholder-count="2">
+<button onClick="{{ v.pick }}" style="{{ v.style }}">{{ v.label }}</button>
+</sc-for>
+</div>
+</div>
+</div>
+
+</div>
+
+<div style="display:flex;align-items:center;gap:26px;flex-wrap:wrap;padding:52px 0 0">
+<button class="btn btn-primary" onClick="{{ go2 }}" style="font-size:19px;padding:16px 34px;letter-spacing:.02em">Find open tee-times</button>
+<span style="font-size:15px;color:var(--color-neutral-700);font-style:italic">{{ summary }}</span>
+</div>
+</section>
+</main>
+</sc-if>
+
+<sc-if value="{{ isList }}" hint-placeholder-val="{{ false }}">
+<main style="max-width:1180px;margin:0 auto;padding:0 32px">
+
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:24px 0 0">
+<sc-for list="{{ pills }}" as="p" hint-placeholder-count="6">
+<button onClick="{{ p.pick }}" style="{{ p.style }}">{{ p.label }}</button>
+</sc-for>
+<button class="btn btn-secondary" onClick="{{ go1 }}" style="font-size:13px;padding:8px 14px">Edit all parameters</button>
+<button class="btn btn-primary" onClick="{{ refresh }}" style="font-size:13px;padding:8px 16px">Re-run search</button>
+</div>
+
+<section style="padding:34px 0 0">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:30px;flex-wrap:wrap">
+<div>
+<h1 style="margin:0;font-family:var(--font-heading);font-weight:700;font-size:44px;line-height:1;letter-spacing:-.02em">{{ resultCount }} open times</h1>
+<p style="margin:10px 0 0;font-size:16px;color:var(--color-neutral-700)">{{ summary }} · sorted by drive time, closest first</p>
+</div>
+<div style="display:flex;gap:8px">
+<sc-for list="{{ views }}" as="v" hint-placeholder-count="2">
+<button onClick="{{ v.pick }}" style="{{ v.style }}">{{ v.label }}</button>
+</sc-for>
+</div>
+</div>
+</section>
+
+<sc-if value="{{ byCourse }}" hint-placeholder-val="{{ true }}">
+<table class="table" style="width:100%;margin-top:26px;font-size:16px">
+<thead>
+<tr>
+<th style="text-align:left;width:31%">Course</th>
+<th style="text-align:left;width:9%">Drive</th>
+<th style="text-align:left;width:9%">Rate</th>
+<th style="text-align:left">Open times in your window</th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{ courses }}" as="c" hint-placeholder-count="7">
+<tr>
+<td style="vertical-align:top;padding-top:16px">
+<div style="font-family:var(--font-heading);font-weight:600;font-size:18px;line-height:1.2">{{ c.name }}</div>
+<div style="font-size:14px;color:var(--color-neutral-700);margin-top:3px">{{ c.city }}</div>
+</td>
+<td style="vertical-align:top;padding-top:18px;font-variant-numeric:tabular-nums">{{ c.drive }}</td>
+<td style="vertical-align:top;padding-top:18px;font-variant-numeric:tabular-nums">{{ c.rate }}</td>
+<td style="vertical-align:top;padding-top:12px">
+<div style="display:flex;flex-wrap:wrap;gap:7px">
+<sc-for list="{{ c.times }}" as="t" hint-placeholder-count="6">
+<button onClick="{{ t.pick }}" style="{{ t.style }}">{{ t.label }}</button>
+</sc-for>
+</div>
+</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</sc-if>
+
+<sc-if value="{{ byTime }}" hint-placeholder-val="{{ false }}">
+<table class="table" style="width:100%;margin-top:26px;font-size:16px">
+<thead>
+<tr>
+<th style="text-align:left;width:16%">Time</th>
+<th style="text-align:left">Courses with this slot open</th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{ slots }}" as="s" hint-placeholder-count="8">
+<tr>
+<td style="vertical-align:top;padding-top:16px;font-family:var(--font-heading);font-weight:600;font-size:18px;font-variant-numeric:tabular-nums">{{ s.label }}</td>
+<td style="vertical-align:top;padding-top:12px">
+<div style="display:flex;flex-wrap:wrap;gap:7px">
+<sc-for list="{{ s.entries }}" as="e" hint-placeholder-count="3">
+<button onClick="{{ e.pick }}" style="{{ e.style }}">{{ e.label }}</button>
+</sc-for>
+</div>
+</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</sc-if>
+
+<p style="margin:30px 0 0;font-size:14px;color:var(--color-neutral-700);font-style:italic">Struck-through slots were taken while you were looking. Sheets re-read every 90 seconds.</p>
+</main>
+</sc-if>
+
+<sc-if value="{{ isBook }}" hint-placeholder-val="{{ false }}">
+<main style="max-width:1180px;margin:0 auto;padding:0 32px">
+<button class="btn btn-ghost" onClick="{{ go2 }}" style="margin:22px 0 0;padding:6px 0;font-size:14px">← Back to open times</button>
+
+<section style="display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:56px;padding:26px 0 0;align-items:start">
+
+<div>
+<p style="margin:0 0 14px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-accent-700)">{{ sel.day }} · {{ sel.date }}</p>
+<h1 style="margin:0;font-family:var(--font-heading);font-weight:700;font-size:clamp(44px,5.4vw,72px);line-height:.95;letter-spacing:-.025em">{{ sel.time }} at {{ sel.course }}</h1>
+<p style="margin:18px 0 0;font-size:19px;color:var(--color-neutral-800);line-height:1.5">{{ sel.blurb }}</p>
+
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;padding:38px 0 0">
+<div>
+<div style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)">Players</div>
+<div style="font-family:var(--font-heading);font-size:26px;font-weight:600;margin-top:4px">{{ sel.players }}</div>
+</div>
+<div>
+<div style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)">Holes</div>
+<div style="font-family:var(--font-heading);font-size:26px;font-weight:600;margin-top:4px">{{ sel.holes }}</div>
+</div>
+<div>
+<div style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)">Cart</div>
+<div style="font-family:var(--font-heading);font-size:26px;font-weight:600;margin-top:4px">{{ sel.ride }}</div>
+</div>
+<div>
+<div style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)">Drive</div>
+<div style="font-family:var(--font-heading);font-size:26px;font-weight:600;margin-top:4px">{{ sel.drive }}</div>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:44px;padding:46px 0 0">
+<div>
+<h2 style="margin:0 0 14px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:600">What you pay</h2>
+<table class="table" style="width:100%;font-size:16px">
+<tbody>
+<sc-for list="{{ sel.price }}" as="p" hint-placeholder-count="4">
+<tr>
+<td>{{ p.label }}</td>
+<td style="text-align:right;font-variant-numeric:tabular-nums">{{ p.amount }}</td>
+</tr>
+</sc-for>
+<tr>
+<td style="font-family:var(--font-heading);font-weight:600">Total</td>
+<td style="text-align:right;font-family:var(--font-heading);font-weight:600;font-variant-numeric:tabular-nums">{{ sel.total }}</td>
+</tr>
+</tbody>
+</table>
+<p style="margin:10px 0 0;font-size:13.5px;color:var(--color-neutral-700);font-style:italic">Charged by the course at check-in. Free cancellation up to 24 hours out.</p>
+</div>
+<div>
+<h2 style="margin:0 0 14px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:600">At tee time</h2>
+<div style="font-family:var(--font-heading);font-size:48px;font-weight:700;line-height:1">{{ sel.temp }}</div>
+<div style="font-size:16px;color:var(--color-neutral-800);margin-top:6px;line-height:1.5">{{ sel.weather }}</div>
+<div style="font-size:15px;color:var(--color-neutral-700);margin-top:14px;line-height:1.6">Sunrise {{ sel.sunrise }}<br>Frost delay risk: {{ sel.frost }}</div>
+</div>
+</div>
+
+<div style="padding:46px 0 0">
+<h2 style="margin:0 0 14px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:600">Getting there</h2>
+<div style="border:1px dashed var(--color-neutral-400);background:var(--color-neutral-200);height:210px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-md)">
+<span style="font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-600)">Map placeholder — route from home</span>
+</div>
+<p style="margin:12px 0 0;font-size:16px;color:var(--color-neutral-800)">{{ sel.address }} · {{ sel.drive }} door to door. Leave by <strong>{{ sel.leaveBy }}</strong> to warm up.</p>
+</div>
+</div>
+
+<aside style="position:sticky;top:20px">
+<div class="card elev-md" style="padding:26px">
+<div class="card-kicker" style="letter-spacing:.14em;text-transform:uppercase;font-size:12px">Hold expires in 8:41</div>
+<div class="card-title" style="font-family:var(--font-heading);font-size:26px;font-weight:700;margin:8px 0 4px"><span>{{ sel.time }} · {{ sel.players }} players</span></div>
+<div class="card-body" style="font-size:15px;color:var(--color-neutral-700)">{{ sel.course }} · {{ sel.day }}</div>
+<button class="btn btn-primary btn-block" style="margin-top:20px;font-size:18px;padding:15px">Book this tee time</button>
+<p style="margin:12px 0 0;font-size:13.5px;color:var(--color-neutral-700);text-align:center">Confirmed on the course's sheet instantly.</p>
+<div style="height:1px;background:var(--color-divider);margin:22px 0"></div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<button class="btn btn-secondary btn-block"><span>Call the pro shop · {{ sel.phone }}</span></button>
+<button class="btn btn-secondary btn-block">Open directions</button>
+<button class="btn btn-ghost btn-block">Share with playing partners</button>
+<button class="btn btn-ghost btn-block"><span>Book on {{ sel.site }} instead</span></button>
+</div>
+</div>
+<p style="margin:16px 4px 0;font-size:13.5px;color:var(--color-neutral-700);line-height:1.6">Also open at this course today: {{ sel.alsoOpen }}</p>
+</aside>
+
+</section>
+</main>
+</sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900}}">
+const COURSES = [
+  { name: 'Timpanogos Golf Club', city: 'Provo', drive: '9 min', mi: 4, rate: '$42', phone: '(801) 555-0142', site: 'timpanogosgc.com',
+    address: '1200 E Center St, Provo', times: ['6:10', '6:30', '7:00', '8:20', '9:40'] },
+  { name: 'Sleepy Ridge Golf Course', city: 'Orem', drive: '12 min', mi: 6, rate: '$49', phone: '(801) 555-0198', site: 'sleepyridgegolf.com',
+    address: '745 S Sleepy Ridge Dr, Orem', times: ['6:20', '7:20', '7:40', '9:10'] },
+  { name: 'Cedar Hills Golf Club', city: 'Cedar Hills', drive: '18 min', mi: 9, rate: '$38', phone: '(801) 555-0110', site: 'cedarhills.org/golf',
+    address: '10640 N Clubhouse Dr, Cedar Hills', times: ['6:30', '7:10', '8:00', '8:50', '10:00'] },
+  { name: 'Fox Hollow Golf Club', city: 'American Fork', drive: '22 min', mi: 12, rate: '$44', phone: '(801) 555-0173', site: 'foxhollowutah.com',
+    address: '1400 N 200 E, American Fork', times: ['6:50', '7:30', '9:20'] },
+  { name: 'Hobble Creek Golf Course', city: 'Springville', drive: '24 min', mi: 14, rate: '$36', phone: '(801) 555-0125', site: 'hobblecreekgolf.com',
+    address: '3005 E Canyon Rd, Springville', times: ['6:40', '8:10', '8:40', '9:50'] },
+  { name: 'The Oaks at Spanish Fork', city: 'Spanish Fork', drive: '31 min', mi: 18, rate: '$40', phone: '(801) 555-0161', site: 'spanishfork.org/oaks',
+    address: '1600 S Main St, Spanish Fork', times: ['7:00', '7:50', '9:30'] },
+  { name: 'Thanksgiving Point', city: 'Lehi', drive: '34 min', mi: 21, rate: '$75', phone: '(801) 555-0187', site: 'thanksgivingpoint.org',
+    address: '3300 Clubhouse Dr, Lehi', times: ['6:40', '8:30', '10:10'] }
+];
+
+const TAKEN = { 'Cedar Hills Golf Club|8:00': true, 'Hobble Creek Golf Course|9:50': true };
+
+class Component extends DCLogic {
+  state = {
+    screen: 'home', view: 'course', radius: 20,
+    days: ['Sat', 'Sun'], window: '6–10 AM', players: 4, holes: 18, ride: 'Ride',
+    sel: { course: 'Sleepy Ridge Golf Course', time: '7:20' }
+  };
+
+  pill(active, opts) {
+    const o = opts || {};
+    return [
+      'font-family:var(--font-body)',
+      'font-size:' + (o.size || 15) + 'px',
+      'padding:' + (o.pad || '8px 15px'),
+      'border-radius:var(--radius-md)',
+      'cursor:pointer',
+      'font-variant-numeric:tabular-nums',
+      'transition:background .12s,color .12s',
+      active
+        ? 'background:var(--color-accent-700);color:#fff;border:1px solid var(--color-accent-700)'
+        : 'background:transparent;color:var(--color-text);border:1px solid var(--color-neutral-400)'
+    ].join(';');
+  }
+
+  opts(list, key, extra) {
+    return list.map(v => ({
+      label: String(v),
+      style: this.pill(this.state[key] === v, extra),
+      pick: () => this.setState({ [key]: v })
+    }));
+  }
+
+  visible() { return COURSES.filter(c => c.mi <= this.state.radius); }
+
+  timeLabel(t) { return t + (parseInt(t, 10) < 12 && parseInt(t, 10) >= 6 ? ' AM' : ' PM'); }
+
+  timeChip(c, t) {
+    const taken = TAKEN[c.name + '|' + t];
+    const active = this.state.sel.course === c.name && this.state.sel.time === t;
+    let s = this.pill(active, { size: 15, pad: '7px 13px' });
+    if (taken) s += ';opacity:.4;text-decoration:line-through;cursor:not-allowed';
+    return {
+      label: this.timeLabel(t), style: s,
+      pick: taken ? () => {} : () => this.setState({ sel: { course: c.name, time: t }, screen: 'book' })
+    };
+  }
+
+  navStyle(id) {
+    const on = this.state.screen === id;
+    return 'background:none;border:0;padding:0 0 8px;cursor:pointer;font-family:var(--font-body);font-size:13px;letter-spacing:.08em;text-transform:uppercase;'
+      + (on ? 'color:var(--color-text);border-bottom:2px solid var(--color-accent-2-700);font-weight:600'
+            : 'color:var(--color-neutral-600);border-bottom:2px solid transparent');
+  }
+
+  renderVals() {
+    const st = this.state;
+    const vis = this.visible();
+    const dayList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const count = vis.reduce((n, c) => n + c.times.length, 0);
+
+    const slotMap = {};
+    vis.forEach(c => c.times.forEach(t => { (slotMap[t] = slotMap[t] || []).push(c); }));
+    const slots = Object.keys(slotMap).sort((a, b) => parseFloat(a.replace(':', '.')) - parseFloat(b.replace(':', '.')))
+      .map(t => ({
+        label: this.timeLabel(t),
+        entries: slotMap[t].map(c => {
+          const chip = this.timeChip(c, t);
+          return { label: c.name + ' · ' + c.drive, style: chip.style, pick: chip.pick };
+        })
+      }));
+
+    const c = COURSES.find(x => x.name === st.sel.course) || COURSES[1];
+    const rate = parseInt(c.rate.replace('$', ''), 10);
+    const cart = st.ride === 'Ride' ? 18 : 0;
+    const also = c.times.filter(t => t !== st.sel.time).map(t => this.timeLabel(t)).join(', ');
+
+    return {
+      isHome: st.screen === 'home', isList: st.screen === 'list', isBook: st.screen === 'book',
+      byCourse: st.view === 'course', byTime: st.view === 'time',
+      go1: () => this.setState({ screen: 'home' }),
+      go2: () => this.setState({ screen: 'list' }),
+      go3: () => this.setState({ screen: 'book' }),
+      refresh: () => this.forceUpdate(),
+      nav1: this.navStyle('home'), nav2: this.navStyle('list'), nav3: this.navStyle('book'),
+
+      radii: this.opts([10, 20, 30, 45], 'radius').map(o => ({ ...o, label: o.label + ' mi' })),
+      days: dayList.map(d => ({
+        label: d,
+        style: this.pill(st.days.indexOf(d) > -1, { pad: '8px 13px' }),
+        pick: () => this.setState(s => ({ days: s.days.indexOf(d) > -1 ? s.days.filter(x => x !== d) : s.days.concat(d) }))
+      })),
+      windows: this.opts(['Dawn–8 AM', '6–10 AM', '10 AM–2 PM', 'After 3 PM'], 'window'),
+      players: this.opts([1, 2, 3, 4], 'players', { pad: '8px 14px' }),
+      holes: this.opts([9, 18], 'holes', { pad: '8px 14px' }),
+      rides: this.opts(['Walk', 'Ride'], 'ride', { pad: '8px 14px' }),
+      views: [
+        { label: 'By course', style: this.pill(st.view === 'course'), pick: () => this.setState({ view: 'course' }) },
+        { label: 'By time', style: this.pill(st.view === 'time'), pick: () => this.setState({ view: 'time' }) }
+      ],
+      pills: [
+        { label: 'Within ' + st.radius + ' mi', style: this.pill(true, { size: 13, pad: '7px 12px' }), pick: () => this.setState({ radius: st.radius === 45 ? 10 : [20, 30, 45, 45][[10, 20, 30, 45].indexOf(st.radius)] }) },
+        { label: st.days.join(' / ') || 'Any day', style: this.pill(true, { size: 13, pad: '7px 12px' }), pick: () => this.setState({ screen: 'home' }) },
+        { label: st.window, style: this.pill(true, { size: 13, pad: '7px 12px' }), pick: () => this.setState({ screen: 'home' }) },
+        { label: st.players + ' players', style: this.pill(true, { size: 13, pad: '7px 12px' }), pick: () => this.setState({ players: st.players === 4 ? 2 : st.players + 1 }) },
+        { label: st.holes + ' holes', style: this.pill(true, { size: 13, pad: '7px 12px' }), pick: () => this.setState({ holes: st.holes === 18 ? 9 : 18 }) },
+        { label: st.ride, style: this.pill(true, { size: 13, pad: '7px 12px' }), pick: () => this.setState({ ride: st.ride === 'Ride' ? 'Walk' : 'Ride' }) }
+      ],
+
+      radiusNote: vis.length + ' of 7 courses within ' + st.radius + ' miles',
+      daysNote: st.days.length ? st.days.join(', ') : 'Pick at least one day',
+      windowNote: 'Shows every slot that starts in this window',
+      summary: st.days.join('/') + ' · ' + st.window + ' · ' + st.players + ' players · ' + st.holes + ' holes · ' + st.ride.toLowerCase(),
+      resultCount: count,
+      courses: vis.map(cc => ({
+        name: cc.name, city: cc.city, drive: cc.drive, rate: cc.rate,
+        times: cc.times.map(t => this.timeChip(cc, t))
+      })),
+      slots,
+
+      sel: {
+        course: c.name, time: this.timeLabel(st.sel.time), day: st.days[0] === 'Sun' ? 'Sunday' : 'Saturday', date: 'Sep 12, 2026',
+        players: st.players, holes: st.holes, ride: st.ride, drive: c.drive, address: c.address, phone: c.phone, site: c.site,
+        blurb: c.city + ' municipal course. Your parameters matched ' + c.times.length + ' open slots here — this is the earliest one that fits.',
+        price: [
+          { label: st.holes + '-hole green fee × ' + st.players, amount: '$' + rate * st.players },
+          { label: cart ? 'Cart × ' + st.players : 'Walking', amount: cart ? '$' + cart * st.players : '$0' },
+          { label: 'Booking fee', amount: '$0' }
+        ],
+        total: '$' + (rate * st.players + cart * st.players),
+        temp: '61°', weather: 'Clear, wind 5 mph out of the north. Warming to 78° by the turn.',
+        sunrise: '7:04 AM', frost: 'None', leaveBy: '6:48 AM',
+        alsoOpen: also
+      }
+    };
+  }
+}
+
+</script>
+</body>
+</html>
